@@ -4,7 +4,7 @@ An Embody Mode app server for a Stackchan and the devices that work with it. The
 
 <img src="docs/img/cockpit.png" width="640" alt="sbot's cockpit: the robot's camera, a joystick for the car, head pad and lights">
 
-Part of [i41eu-arch](https://github.com/i41-eu/i41eu-arch), a local first, privacy first platform for a home: sbot grows into its home node (web/API server, event hub, controller server). The robot runs Embody Mode from the [i41eu-embody firmware](https://github.com/i41-eu/i41eu-embody), and the car's micro:bit runs [tpbot-ble](https://github.com/i41-eu/i41eu-tpbot-ble).
+Part of [i41eu-arch](https://github.com/i41-eu/i41eu-arch), a local first, privacy first platform for a home: sbot grows into its home node (web/API server, event hub, controller server). The robot runs Embody Mode from the [i41eu-StackChan firmware](https://github.com/i41-eu/i41eu-StackChan), and the car's micro:bit runs [tpbot-ble](https://github.com/i41-eu/i41eu-tpbot-ble).
 
 **Usually: the robot drives the car.** Stackchan connects to the car's micro:bit over BLE
 itself, so everything runs on the robot's one Wi-Fi connection:
@@ -45,7 +45,7 @@ Every device is a `robot` worker of the [device wire protocol](https://github.co
 
 | Piece | What it is | Needed? |
 |---|---|---|
-| **Robot** | a Stackchan with the [Embody Mode firmware](https://github.com/i41-eu/i41eu-embody/tree/main/firmware/main/apps/app_embody_mode). On its screen the **app switcher** (the QR screen: Next, Connect) lists its apps and switches between them; its gear opens the **Manager screen** (which manager it has, turn it off or on). | yes |
+| **Robot** | a Stackchan with the [Embody Mode firmware](https://github.com/i41-eu/i41eu-StackChan/tree/embody/firmware/main/apps/app_embody_mode). On its screen the **app switcher** (the QR screen: Next, Connect) lists its apps and switches between them; its gear opens the **Manager screen** (which manager it has, turn it off or on). | yes |
 | **Apps** | what the robot does, one at a time. Each app is a web service: the robot connects to it, and a phone or browser opens its web page. This repo is Sbot, an app at home; the apps online: [s.i41.eu](https://s.i41.eu/#apps) | at least one |
 | **Phone or browser** | opens an app's page and pairs with the robot by scanning its QR code; with end-to-end encryption only paired browsers can read the robot | to use an app |
 | **Manager** | [i41eu-manager](https://github.com/i41-eu/i41eu-manager): the web service that sets robots up over USB, gives each robot its own token per app, and switches and changes apps from its page; on your own computer (the home manager) or online at [m.i41.eu](https://m.i41.eu), which a home manager may link to | optional: without it, apps are written over USB and switched on the robot's app switcher |
@@ -64,7 +64,7 @@ go install github.com/i41-eu/i41eu-tpbot-ble/cmd/tpbot-bridge@latest
 tpbot-bridge -with stackchan-0a1b2c3d4e50
 ```
 
-- **Setting up the robot:** with a Stackchan manager ([i41eu-manager](https://github.com/i41-eu/i41eu-manager)) at home, with sbot in its app catalog, as in [SETUP.md](https://github.com/i41-eu/i41eu-embody/blob/main/firmware/main/apps/app_embody_mode/SETUP.md) in i41eu-embody; for the car: [Optional: drive a TPBot car](https://github.com/i41-eu/i41eu-embody/blob/main/firmware/main/apps/app_embody_mode/SETUP.md#optional-drive-a-tpbot-car).
+- **Setting up the robot:** with a Stackchan manager ([i41eu-manager](https://github.com/i41-eu/i41eu-manager)) at home, with sbot in its app catalog, as in [SETUP.md](https://github.com/i41-eu/i41eu-StackChan/blob/embody/firmware/main/apps/app_embody_mode/SETUP.md) in i41eu-StackChan; for the car: [Optional: drive a TPBot car](https://github.com/i41-eu/i41eu-StackChan/blob/embody/firmware/main/apps/app_embody_mode/SETUP.md#optional-drive-a-tpbot-car).
 - **Getting the robot to sbot:** the manager writes sbot into the robot with the other apps you tick (catalog entry `{"id": "sbot", "name": "Sbot", "url": "ws://192.168.1.10:8780", "token_file": "<sbot's robot token file>"}`). On the robot: QR screen → Next until Sbot → Connect.
 - **Pairing:** scan the robot's QR code, or type the 8-character code shown under it into the page. Pairing a Stackchan also gives access to the devices linked to it.
 - **Leaving sbot:** "Move robot to" under the head buttons sends `server_switch`.
@@ -161,7 +161,7 @@ Proof of concept, tested on real hardware on a LAN: the micro:bit in the TPBot, 
 ## Related projects
 
 - [i41eu-arch](https://github.com/i41-eu/i41eu-arch): the vision, use cases and architecture that sbot grows into, and the device wire protocol. All the repos: [The repos today](https://github.com/i41-eu/i41eu-arch#the-repos-today).
-- [i41eu-embody](https://github.com/i41-eu/i41eu-embody): the robot's firmware with Embody Mode, which can host the car over BLE.
+- [i41eu-StackChan](https://github.com/i41-eu/i41eu-StackChan): the robot's firmware with Embody Mode, which can host the car over BLE.
 - [tpbot-ble](https://github.com/i41-eu/i41eu-tpbot-ble): the car's micro:bit firmware and `tpbot-bridge`.
 - [q41eu-raw](https://github.com/i41-eu/q41eu-raw): the `wire` package sbot uses, and the full Stackchan dashboard.
 - The Stackchan [trust design](https://github.com/i41-eu/i41eu-arch/blob/main/docs/implementations/stackchan-trust.md).
