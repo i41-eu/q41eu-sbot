@@ -111,8 +111,8 @@ Each device has a name and a room (the first piece of the home model), set under
 
 ## Page
 
-- **Stackchan:** live camera (on only while someone watches), a head pad, nod / shake / home, emotions, the LED strips, and moving the robot to another server.
-- **Car:** a joystick (speed by distance from the center), a hold-to-drive pad and WASD/arrow keys, where space stops; speed; headlights; sonar distance, line sensors, the micro:bit buttons, motor speeds, and the watchdog flag.
+- **Stackchan:** live camera (on only while someone watches), a head pad (left and right are the robot's own, as its camera shows them: ▶ and the → key turn the head to the robot's right), nod / shake / home, emotions, the LED strips, and moving the robot to another server.
+- **Car:** a joystick (speed by distance from the center), a hold-to-drive pad and the WASD keys, where space stops; speed; headlights; sonar distance, line sensors, the micro:bit buttons, motor speeds, and the watchdog flag.
 - **Events** from all visible devices, including the commands browsers sent. `car_drive` (10 per second while driving), `look` and `ping` are not listed.
 
 **Safety stop** (`internal/app/safety.go`): no forward driving while the car's sonar sees something closer than the car's limit (default 10 cm; off, 5, 10, 15, 20 or 30 on the page, kept in the state file). A `car_drive` going forward on average, `(left + right) / 2 > 0`, is sent as `car_stop` instead (the answer is `{"status": "safety_stop", "cm", "limit_cm"}`). A car that reports moving forward inside the limit is stopped at once. Backward and turning on the spot stay allowed, so the car can always get away. The episode ends 3 cm past the limit, with one `safety_stop {cm, limit_cm}` event per episode. It uses only fresh readings (under 1.5 s) with an echo: with the sonar off, or nothing in range, there is no stop.

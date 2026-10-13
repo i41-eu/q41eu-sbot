@@ -308,7 +308,13 @@ function carJoystick(c) {
 }
 
 // Head: the robot keeps the angle; the pad steps the target while held.
-const headSteps = {"▲": [0, 5], "▼": [0, -5], "◀": [-8, 0], "▶": [8, 0]};
+// A positive yaw turns the head to the robot's own left (counter-clockwise seen from above), a
+// negative one to its right. On this page left and right are the robot's own, as its camera
+// shows them: ▶ and the → key turn the head to the robot's right (yaw down).
+const headSteps = {  // [yaw step, pitch step, title]
+  "▲": [0, 5, "look up (↑)"], "▼": [0, -5, "look down (↓)"],
+  "◀": [8, 0, "turn the head to the robot's left (←)"], "▶": [-8, 0, "turn the head to the robot's right (→)"],
+};
 const heads = new Map(); // robot id -> {yaw, pitch, at, timer}
 
 function headStep(id, dy, dp) {
@@ -336,8 +342,8 @@ function headPad(r) {
   const off = !r.online;
   const has = c => r.commands.includes(c);
   const cell = (label) => {
-    const [dy, dp] = headSteps[label];
-    return holdButton(label, "move the head", () => headHold(r.id, dy, dp), () => headRelease(r.id), off);
+    const [dy, dp, title] = headSteps[label];
+    return holdButton(label, title, () => headHold(r.id, dy, dp), () => headRelease(r.id), off);
   };
   const act = (label, cmd, title) => has(cmd)
     ? h("button", {class: "small", title, disabled: off ? "" : null, onclick: () => { heads.delete(r.id); command(r.id, cmd); }}, label)
@@ -346,7 +352,8 @@ function headPad(r) {
     act("nod", "nod", "nod"), cell("▲"), act("shake", "shake", "shake"),
     cell("◀"), act("●", "home", "home: look straight ahead"), cell("▶"),
     h("span", {}), cell("▼"), h("span", {}));
-  return h("div", {class: "padbox"}, h("h3", {}, "Head ", h("kbd", {}, "arrows")), pad);
+  return h("div", {class: "padbox"}, h("h3", {}, "Head ",
+    h("kbd", {title: "the arrow keys: ← and → turn the head to the robot's left and right, as its camera shows it"}, "arrows")), pad);
 }
 
 /* -------------------------------- lights -------------------------------- */
@@ -500,7 +507,8 @@ function updateTelemetry(id) {
 
 /* ------------------------------ keyboard -------------------------------- */
 
-// WASD drives the first connected car, the arrow keys move the first robot's head, space stops.
+// WASD drives the first connected car, the arrow keys move the first robot's head as the head pad
+// does (→ like ▶: to the robot's right), space stops.
 const keyDirs = {w: [1, 1], s: [-1, -1], a: [-0.6, 0.6], d: [0.6, -0.6]};
 const keyHead = {arrowup: "▲", arrowdown: "▼", arrowleft: "◀", arrowright: "▶"};
 const keysDown = new Set();
